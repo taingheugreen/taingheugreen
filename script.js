@@ -1,27 +1,60 @@
-window.addEventListener('scroll', () => {
-    const header = document.querySelector('.header');
-    const headerText = header.querySelectorAll('.nav_links li a'); // Chọn tất cả phần tử <li> trong header
-    const scrollY = window.scrollY; // Lấy khoảng cách cuộn
+const scrollRevealOption = {
+    distance: "50px",
+    origin: "bottom",
+    duration: 1000,
+  };
+  
+  ScrollReveal().reveal(".header-image img", {
+    ...scrollRevealOption,
+    origin: "right",
+  });
+  ScrollReveal().reveal(".header-content-product h1", {
+    ...scrollRevealOption,
+    delay: 500,
+  });
+  ScrollReveal().reveal(".header-content-product p", {
+    ...scrollRevealOption,
+    delay: 1000,
+  });
+  ScrollReveal().reveal(".header-image-content-product ", {
+    duration: 1000,
+    delay: 1500,
+  });
+  
+  ScrollReveal().reveal(".product__image img", {
+    ...scrollRevealOption,
+    origin: "left",
+  });
+  ScrollReveal().reveal(".product__card", {
+    ...scrollRevealOption,
+    delay: 500,
+    interval: 500,
+  });
 
-    const opacity = Math.min(scrollY / 380, 1); // Giới hạn opacity từ 0 đến 1
+  document.addEventListener("DOMContentLoaded", function () {
+    const colorOptions = document.querySelectorAll(".product__colors div");
+    const productSection = document.querySelector(".product");
+    const productImage = document.querySelector(".product__image img");
+  
+    colorOptions.forEach((color) => {
+      color.addEventListener("click", function () {
+        const selectedColor = this.getAttribute("data-color");
+        const selectedImage = this.getAttribute("data-image");
+  
+        // Đổi ảnh sản phẩm
+        if (selectedImage) {
+          productImage.style.opacity = "0"; // Làm mờ ảnh trước khi đổi
 
-    if (scrollY > 0) {
-        // Đổi màu nền dần
-        header.style.backgroundColor = `rgba(255, 255, 255, ${opacity})`;
-
-        // Chuyển màu chữ từ trắng (#ffffff) sang đen
-        const r = Math.round(255 - (255 - 0) * opacity); // Chuyển từ 255 (trắng) sang 3
-        const g = Math.round(255 - (255 - 0) * opacity); // Chuyển từ 255 (trắng) sang 242
-        const b = Math.round(255 - (255 - 0) * opacity); // Chuyển từ 255 (trắng) sang 166
-
-        headerText.forEach((element) => {
-            element.style.color = `rgb(${r}, ${g}, ${b})`; // Gán màu RGB cho chữ
-        });
-    } else {
-        // Reset trạng thái khi cuộn lên đầu
-        header.style.backgroundColor = 'rgba(255, 255, 255, 0)';
-        headerText.forEach((element) => {
-            element.style.color = 'rgb(255, 255, 255)'; // Màu chữ trở về trắng
-        });
-    }
-});
+        setTimeout(() => {
+          productImage.src = selectedImage; // Đổi ảnh
+          productImage.style.opacity = "1"; // Hiện lại ảnh từ từ
+        }, 500); // Đợi 200ms để tránh giật ảnh
+      }
+ 
+  
+        // Hiệu ứng chọn màu
+        colorOptions.forEach((c) => c.innerHTML = ""); // Xóa dấu check ở tất cả
+        this.innerHTML = '<i class="ri-check-line"></i>'; // Thêm dấu check vào màu được chọn
+      });
+    });
+  });
